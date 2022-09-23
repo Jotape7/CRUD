@@ -121,5 +121,41 @@ app.put("/account", verifyIfExistsAccountCPF, (request, response) => {
     return response.status(201).send()
 })
 
+app.get("/account", verifyIfExistsAccountCPF, (request, response) => {
+    const { customer } = request
+
+    return response.json(customer) 
+})
+
+app.delete("/account", verifyIfExistsAccountCPF, (request, response) => {
+    const { customer } = request
+
+
+    const index = customers.reduce((acc, elemento, index) => {
+       
+        if (customer.cpf === elemento.cpf) acc = index
+        
+        return acc
+    }, 0)
+    // splice
+    customers.splice(index, 1);
+
+    // delete customers[index]
+
+    return response.status(200).json(customers)
+})
+
+app.get("/balance", verifyIfExistsAccountCPF, (request, response) => {
+    const { customer } = request
+
+    const balance = getBalance(customer.statement)
+
+    return response.json(balance)
+})
+
+app.get("/customers", (request, response) => {
+    return response.status(200).json(customers)
+})
+
 
 app.listen(3333);
